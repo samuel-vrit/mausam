@@ -7,7 +7,7 @@
 
 
     <application
-        android:label="mausam"
+        android:label="Mausam"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
