@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 class NetworkService {
   Future<dynamic> getWeatherData() async {
     LocationService locationService = LocationService();
-    var position = locationService.getLocation();
 
     try {
       var response = await http.get(Uri.parse(

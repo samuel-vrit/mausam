@@ -3,10 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:mausam/screens/home_page.dart';
-import 'package:mausam/services/location_service.dart';
 import 'package:mausam/services/network_service.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -25,9 +23,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   init() async {
     NetworkService networkService = NetworkService();
-    var data = await networkService.getWeatherData();
+    var weatherData = await networkService.getWeatherData();
 
-    print(data);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => HomePage()));
   }
