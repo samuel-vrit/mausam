@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
 import 'package:mausam/screens/home_page.dart';
+import 'package:mausam/services/network_service.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -15,65 +17,32 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
+    init();
     super.initState();
   }
 
-  double longitude = 0;
-  double latitude = 0;
+  init() async {
+    NetworkService networkService = NetworkService();
+    var weatherData = await networkService.getWeatherData();
 
-  getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    // Test if location services are enabled.
-
-    try {
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        print('Location services are disabled.');
-      }
-
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        print(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      }
-
-      var position = await Geolocator.getCurrentPosition();
-      longitude = position.longitude;
-      latitude = position.latitude;
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  getWeatherData() async {
-    await getLocation();
-
-    var response = await get(Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=926a4b5abc0d7da83c707e29388f3e9d&units=metric"));
-    var decodedData = jsonDecode(response.body);
-
-    print("Status code :: ${response.statusCode}");
-
-    print(decodedData['main']['temp']);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-            onPressed: () {
-              getWeatherData();
-            },
-            child: Text("Get weather data")),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SpinKitWave(
+              color: Color(0xff48CAE4),
+            ),
+            SizedBox(height: 20),
+            Text("Getting weather data..."),
+          ],
+        ),
       ),
     );
   }
