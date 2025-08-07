@@ -6,7 +6,7 @@ class LocationService {
   double longitude = 0;
   double latitude = 0;
 
-  getLocation() async {
+  Future getLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
     // Test if location services are enabled.
@@ -33,7 +33,10 @@ class LocationService {
         }
       }
 
-      var position = await Geolocator.getCurrentPosition();
+      var position = await Geolocator.getCurrentPosition(
+          // locationSettings:
+          //     LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
+          );
       longitude = position.longitude;
       latitude = position.latitude;
     } catch (e) {

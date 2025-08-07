@@ -22,11 +22,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   init() async {
-    NetworkService networkService = NetworkService();
-    var weatherData = await networkService.getWeatherData();
+    WeatherService weatherService = WeatherService();
+    var weatherData = await weatherService.getWeatherData();
 
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage(
+                  weatherData: weatherData,
+                )));
   }
 
   @override
