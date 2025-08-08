@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mausam/constants.dart';
 import 'package:mausam/screens/home_page.dart';
-import 'package:mausam/services/network_service.dart';
+import 'package:mausam/services/weather_service.dart';
 
 class CityNameScreen extends StatelessWidget {
   CityNameScreen({super.key});

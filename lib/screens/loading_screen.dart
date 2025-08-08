@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:mausam/screens/home_page.dart';
-import 'package:mausam/services/network_service.dart';
+import 'package:mausam/services/weather_service.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});

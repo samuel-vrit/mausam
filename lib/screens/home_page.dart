@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String cityName = '';
   String weatherDescription = '';
-  String temperature = '';
+  int temperature = 0;
   String windSpeed = '';
   String humidity = '';
   String pressure = '';
@@ -26,12 +26,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   init() {
-    cityName = widget.weatherData['name'].toString();
-    weatherDescription = widget.weatherData['weather'][0]['main'].toString();
-    temperature = widget.weatherData['main']['temp'].toString();
-    windSpeed = widget.weatherData['wind']['speed'].toString();
-    humidity = widget.weatherData['main']['humidity'].toString();
-    pressure = widget.weatherData['main']['pressure'].toString();
+    if (widget.weatherData != null) {
+      cityName = widget.weatherData['name'].toString();
+      weatherDescription = widget.weatherData['weather'][0]['main'].toString();
+
+      double tempInDouble =
+          double.parse(widget.weatherData['main']['temp'].toString());
+      temperature = tempInDouble.toInt();
+
+      windSpeed = widget.weatherData['wind']['speed'].toString();
+      humidity = widget.weatherData['main']['humidity'].toString();
+      pressure = widget.weatherData['main']['pressure'].toString();
+    } else {
+      cityName = 'City not found';
+      weatherDescription = 'Not found';
+      temperature = 0;
+      windSpeed = 'Not found';
+      humidity = 'Not found';
+      pressure = 'Not found';
+    }
 
     setState(() {});
   }
@@ -75,15 +88,23 @@ class _HomePageState extends State<HomePage> {
               ),
               Text(
                 cityName,
-                style: GoogleFonts.poppins(
-                    fontSize: 32, fontWeight: FontWeight.bold),
+                style: kBoldTextStyle,
               ),
               Text(
                 weatherDescription,
                 style: GoogleFonts.poppins(),
               ),
               SizedBox(height: 50),
-              Image.asset('assets/images/cloudy.png'),
+              if (temperature != 0)
+                Builder(builder: (context) {
+                  if (temperature < 20) {
+                    return Image.asset('assets/images/rainy.png');
+                  } else if (temperature < 30) {
+                    return Image.asset('assets/images/sunny.png');
+                  } else {
+                    return Image.asset('assets/images/cloudy.png');
+                  }
+                }),
               Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -91,10 +112,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(width: 35),
                   Text(
                     '$temperature °',
-                    style: GoogleFonts.poppins(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: kBoldTextStyle,
                   ),
                 ],
               ),
@@ -108,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 5),
                       Text(
                         '$windSpeed m/sec',
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                        style: kWindTextStyle,
                       )
                     ],
                   ),
@@ -118,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 5),
                       Text(
                         '$humidity%',
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                        style: kHumidityTextStyle,
                       )
                     ],
                   ),
@@ -128,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 5),
                       Text(
                         '$pressure hPa',
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                        style: kPressureTextStyle,
                       )
                     ],
                   )
